@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kubesphere
+    component: HelloDevOps
+    tier: backend
+  name: HelloDevOps
+  namespace: hello-devops-project
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubesphere
+      component: HelloDevOps
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: kubesphere
+        component: HelloDevOps
+        tier: backend
+    spec:
+      containers:
+        - image: $DOCKERHUB_NAMESPACE/TestDevOps/HelloDevOps:latest
+          imagePullPolicy: Always
+          name: HelloDevOps
+          ports:
+            - containerPort: 8039
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 300m
+              memory: 600Mi
+            requests:
+              cpu: 100m
+              memory:100Mi
+          terminationMessagePath: /dev/termination-log/HelloDevOps
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
